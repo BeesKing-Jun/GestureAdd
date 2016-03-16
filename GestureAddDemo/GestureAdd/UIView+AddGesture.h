@@ -58,13 +58,13 @@ typedef void(^addOtherHandler)(void);
 /*
  *移除某种手势
  *@prama gestureType 手势类型
- *@prama complete 移除手势时做的操作
+ *@prama completeHandler 移除手势时做的操作
  */
-- (void)removeGestureWithGestureType:(GestureType)gestureType completHandler:(void (^)(void))complete;
+- (void)removeGestureWithGestureType:(GestureType)gestureType completHandler:(void (^)(void))completeHandler;
 /*
  *移除所有手势
- *@prama complete 移除手势时做的操作
+ *@prama completeHandler 移除手势时做的操作
  */
-- (void)removeAllGesture:(void (^)(void))complete;
+- (void)removeAllGesture:(void (^)(void))completeHandler;
 
 @end

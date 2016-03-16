@@ -149,7 +149,7 @@
 /*
  *移除某种类型的手势
  */
-- (void)removeGestureWithGestureType:(GestureType)gestureType completHandler:(void (^)(void))complete
+- (void)removeGestureWithGestureType:(GestureType)gestureType completHandler:(void (^)(void))completeHandler
 {
     for (UIGestureRecognizer *gesture in self.gestureRecognizers) {
         switch (gestureType) {
@@ -176,24 +176,24 @@
                 break;
         }
     }
-    if (complete)
+    if (completeHandler)
     {
-        complete();
+        completeHandler();
     }
 }
 
 /*
  *移除所有手势
  */
-- (void)removeAllGesture:(void (^)(void))complete
+- (void)removeAllGesture:(void (^)(void))completeHandler
 {
     for (UIGestureRecognizer *gesture in self.gestureRecognizers) {
         [self removeGestureRecognizer:gesture];
     }
-    if (complete)
+    if (completeHandler)
     {
         NSLog(@"这里所有手势已经移除");
-        complete();
+        completeHandler();
     }
 }
 
