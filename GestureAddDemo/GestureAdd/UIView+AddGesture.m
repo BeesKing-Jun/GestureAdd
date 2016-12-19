@@ -13,7 +13,7 @@
 @implementation UIView (AddGesture)
 
 - (void)addGestureWithGestureType:(GestureType)gestureType
-                   completeHandler:(void (^)(void))completeHandler
+                  completeHandler:(void (^)(void))completeHandler
 {
     [self addGestureWithGestureType:gestureType otherSettingHandler:nil completeHandler:completeHandler];
 }
@@ -22,65 +22,68 @@
  *添加某种类型的手势
  */
 - (void)addGestureWithGestureType:(GestureType)gestureType
-                  otherSettingHandler:(void(^)(void))addHandler
-                   completeHandler:(void (^)(void))completeHandler
+              otherSettingHandler:(void(^)(void))addHandler
+                  completeHandler:(void (^)(void))completeHandler
 {
     self.userInteractionEnabled = YES;
-    if (!self.handleTapBlockKey) {
-        self.handleTapBlockKey = completeHandler;
+    if (!self.WJ_gestureHandler) {
+        self.WJ_gestureHandler = completeHandler;
     }
-    if (!self.addOtherHandler) {
-        self.addOtherHandler = addHandler;
+    if (!self.WJ_addOtherHandler) {
+        self.WJ_addOtherHandler = addHandler;
     }
-    if (!self.allGesture) {
+    if (!self.WJ_allGesture) {
         switch (gestureType) {
-            case tapGesture:
-                self.allGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_TapGesture:
+                [self removeGestureWithGestureType:WJ_TapGesture completeHandler:^{
+                    
+                }];
+                self.WJ_allGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
-            case panGesture:
-                self.allGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_PanGesture:
+                self.WJ_allGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
-            case longPressGesture:
-                self.allGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_LongPressGesture:
+                self.WJ_allGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
-            case pinchGesture:
-                self.allGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_PinchGesture:
+                self.WJ_allGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
-            case rotationGesture:
-                self.allGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_RotationGesture:
+                self.WJ_allGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
-            case swipeGesture:
-                self.allGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
-                if (self.addOtherHandler)
+            case WJ_SwipeGesture:
+                self.WJ_allGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(__gestureAction:)];
+                if (self.WJ_addOtherHandler)
                 {
-                    self.addOtherHandler();
+                    self.WJ_addOtherHandler();
                 }
-                [self addGestureRecognizer:self.allGesture];
+                [self addGestureRecognizer:self.WJ_allGesture];
                 break;
                 
                 
@@ -94,81 +97,80 @@
  *手势操作
  */
 - (void)__gestureAction:(UIGestureRecognizer *)gesture
-{   
+{
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]]) {
         //这是单击手势
-//        NSLog(@"单击手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"单击手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
     if([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-//        NSLog(@"pan手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"pan手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
     if([gesture isKindOfClass:[UILongPressGestureRecognizer class]])
     {
-//        NSLog(@"longPress手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"longPress手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
     if([gesture isKindOfClass:[UIPinchGestureRecognizer class]])
     {
-//        NSLog(@"pinch手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"pinch手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
     if([gesture isKindOfClass:[UIRotationGestureRecognizer class]])
     {
-//        NSLog(@"rotation手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"rotation手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
     if([gesture isKindOfClass:[UISwipeGestureRecognizer class]])
     {
-//        NSLog(@"swip手势");
-        if (self.handleTapBlockKey)
+        //        NSLog(@"swip手势");
+        if (self.WJ_gestureHandler)
         {
-            self.handleTapBlockKey();
+            self.WJ_gestureHandler();
         }
     }
-    
 }
 
 /*
  *移除某种类型的手势
  */
-- (void)removeGestureWithGestureType:(GestureType)gestureType completHandler:(void (^)(void))completeHandler
+- (void)removeGestureWithGestureType:(GestureType)gestureType completeHandler:(void (^)(void))completeHandler
 {
     for (UIGestureRecognizer *gesture in self.gestureRecognizers) {
         switch (gestureType) {
-            case tapGesture:
+            case WJ_TapGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
-            case panGesture:
+            case WJ_PanGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
-            case longPressGesture:
+            case WJ_LongPressGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
-            case pinchGesture:
+            case WJ_PinchGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
-            case rotationGesture:
+            case WJ_RotationGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
-            case swipeGesture:
+            case WJ_SwipeGesture:
                 [self removeGestureRecognizer:gesture];
                 break;
                 
@@ -199,36 +201,34 @@
 
 #pragma mark -- getter And Setter
 
-- (handleTapBlockKey)handleTapBlockKey
+- (GestureHandler)WJ_gestureHandler
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setHandleTapBlockKey:(handleTapBlockKey)handleTapBlockKey
+- (void)setWJ_gestureHandler:(GestureHandler)WJ_gestureHandler
 {
-    objc_setAssociatedObject(self, @selector(handleTapBlockKey), handleTapBlockKey, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(WJ_gestureHandler), WJ_gestureHandler, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (addOtherHandler)addOtherHandler
-{
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setAddOtherHandler:(addOtherHandler)addOtherHandler
-{
-    objc_setAssociatedObject(self, @selector(addOtherHandler), addOtherHandler, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-
-- (UIGestureRecognizer *)allGesture
+- (AddOtherHandler)WJ_addOtherHandler
 {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setAllGesture:(UIGestureRecognizer *)allGesture
+- (void)setWJ_addOtherHandler:(AddOtherHandler)WJ_addOtherHandler
 {
-    objc_setAssociatedObject(self, @selector(allGesture), allGesture, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(WJ_addOtherHandler), WJ_addOtherHandler, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
+- (UIGestureRecognizer *)WJ_allGesture
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setWJ_allGesture:(UIGestureRecognizer *)WJ_allGesture
+{
+    objc_setAssociatedObject(self, @selector(WJ_allGesture), WJ_allGesture, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 @end
